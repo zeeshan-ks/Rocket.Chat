@@ -10,7 +10,13 @@ const formatPriceAndPurchaseType = (purchaseType, pricingPlans, price) => {
 		if (!pricingPlans || !Array.isArray(pricingPlans) || pricingPlans.length === 0) {
 			return { type, price: '-' };
 		}
-		return { type, price: formatPricingPlan(pricingPlans[0]) };
+
+		const pricingPlan = pricingPlans[0];
+		const tiers = Array.isArray(pricingPlan.tiers) ? pricingPlan.tiers : undefined;
+		if (pricingPlan.price === 0 && !!tiers) {
+			pricingPlan.price = tiers[0].price;
+		}
+		return { type, price: formatPricingPlan(pricingPlan), tiers };
 	}
 
 	if (price > 0) {
