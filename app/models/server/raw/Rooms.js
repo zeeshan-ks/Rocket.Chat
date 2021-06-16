@@ -325,7 +325,7 @@ export class RoomsRaw extends BaseRaw {
 		const params = [...firstParams, sort];
 		if (onlyCount) {
 			params.push({ $count: 'total' });
-			return this.col.aggregate(params);
+			return this.col.aggregate(params, { allowDiskUse: true });
 		}
 		if (options.offset) {
 			params.push({ $skip: options.offset });
@@ -334,7 +334,7 @@ export class RoomsRaw extends BaseRaw {
 			params.push({ $limit: options.count });
 		}
 
-		return this.col.aggregate(params).toArray();
+		return this.col.aggregate(params, { allowDiskUse: true }).toArray();
 	}
 
 	findOneByName(name, options = {}) {
