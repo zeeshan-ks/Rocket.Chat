@@ -1,3 +1,4 @@
+import { ReadPreference } from 'mongodb';
 import { escapeRegExp } from '@rocket.chat/string-helpers';
 
 import { BaseRaw } from './BaseRaw';
@@ -325,7 +326,7 @@ export class RoomsRaw extends BaseRaw {
 		const params = [...firstParams, sort];
 		if (onlyCount) {
 			params.push({ $count: 'total' });
-			return this.col.aggregate(params, { allowDiskUse: true });
+			return this.col.aggregate(params, { allowDiskUse: true, readPreference: ReadPreference.SECONDARY_PREFERRED });
 		}
 		if (options.offset) {
 			params.push({ $skip: options.offset });
@@ -334,7 +335,7 @@ export class RoomsRaw extends BaseRaw {
 			params.push({ $limit: options.count });
 		}
 
-		return this.col.aggregate(params, { allowDiskUse: true }).toArray();
+		return this.col.aggregate(params, { allowDiskUse: true, readPreference: ReadPreference.SECONDARY_PREFERRED }).toArray();
 	}
 
 	findOneByName(name, options = {}) {
