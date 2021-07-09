@@ -3,7 +3,6 @@ import './importPackages';
 import '../imports/startup/server';
 
 import './services/startup';
-
 import '../ee/server';
 import './lib/pushConfig';
 import './startup/migrations';
