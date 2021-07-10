@@ -7,7 +7,7 @@ on:
     branches: '**'
   push:
     branches:
-      - develop
+      - symplitest
 
 env:
   CI: true
@@ -141,7 +141,7 @@ jobs:
     #     git checkout -- server/main.js client/main.js .meteor/packages
 
     - name: Reset Meteor
-      if: startsWith(github.ref, 'refs/tags/') == 'true' || github.ref == 'refs/heads/develop'
+      if: startsWith(github.ref, 'refs/tags/') == 'true' || github.ref == 'refs/heads/symplitest'
       run: |
         meteor reset
 
@@ -402,7 +402,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.ref == 'refs/heads/develop'
+    if: github.event_name == 'release' || github.ref == 'refs/heads/symplitest'
     needs: test
 
     steps:
@@ -544,7 +544,7 @@ jobs:
         docker push ${IMAGE}:${RELEASE}
 
     - name: Build Docker image for develop
-      if: github.ref == 'refs/heads/develop'
+      if: github.ref == 'refs/heads/symplitest'
       run: |
         cd /tmp/build
 
@@ -552,8 +552,8 @@ jobs:
           IMAGE="${IMAGE}.preview"
         fi;
 
-        docker build -t ${IMAGE}:develop .
-        docker push ${IMAGE}:develop
+        docker build -t ${IMAGE}:symplitest .
+        docker push ${IMAGE}:symplitest
 
   services-image-build:
     runs-on: ubuntu-latest
