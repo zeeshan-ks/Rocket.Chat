@@ -487,7 +487,7 @@ jobs:
         release: ["official", "preview"]
 
     env:
-      IMAGE: "rocketchat/rocket.chat"
+      IMAGE: "zeeshanks/rocket.chat"
 
     steps:
     - uses: actions/checkout@v2
