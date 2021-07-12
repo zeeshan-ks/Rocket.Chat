@@ -443,7 +443,7 @@ jobs:
 #           ARTIFACT_NAME="$(npm run version --silent).$GITHUB_SHA"
 #           RC_VERSION="$(npm run version --silent)"
 #           SNAP_CHANNEL=edge
-#           RC_RELEASE=develop
+#           RC_RELEASE=symplitest
 #         fi;
 #         ROCKET_DEPLOY_DIR="/tmp/deploy"
 #         FILENAME="$ROCKET_DEPLOY_DIR/rocket.chat-$ARTIFACT_NAME.tgz";
@@ -543,7 +543,7 @@ jobs:
         docker tag ${IMAGE}:$GIT_TAG ${IMAGE}:${RELEASE}
         docker push ${IMAGE}:${RELEASE}
 
-    - name: Build Docker image for develop
+    - name: Build Docker image for symplitest
       if: github.ref == 'refs/heads/symplitest'
       run: |
         cd /tmp/build
@@ -596,9 +596,9 @@ jobs:
 
         echo "Building Docker image for service: ${{ matrix.service }}:${IMAGE_TAG}"
 
-        docker build --build-arg SERVICE=${{ matrix.service }} -t rocketchat/${{ matrix.service }}-service:${IMAGE_TAG} .
+        docker build --build-arg SERVICE=${{ matrix.service }} -t zeeshanks/${{ matrix.service }}-service:${IMAGE_TAG} .
 
-        docker push rocketchat/${{ matrix.service }}-service:${IMAGE_TAG}
+        docker push zeeshanks/${{ matrix.service }}-service:${IMAGE_TAG}
 
         if [[ $GITHUB_REF == refs/tags/* ]]; then
           if echo "$IMAGE_TAG" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' ; then
@@ -607,6 +607,6 @@ jobs:
             RELEASE="release-candidate"
           fi
 
-          docker tag rocketchat/${{ matrix.service }}-service:${IMAGE_TAG} rocketchat/${{ matrix.service }}-service:${RELEASE}
-          docker push rocketchat/${{ matrix.service }}-service:${RELEASE}
+          docker tag zeeshanks/${{ matrix.service }}-service:${IMAGE_TAG} zeeshanks/${{ matrix.service }}-service:${RELEASE}
+          docker push zeeshanks/${{ matrix.service }}-service:${RELEASE}
         fi
