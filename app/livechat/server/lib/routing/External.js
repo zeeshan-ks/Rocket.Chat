@@ -18,7 +18,7 @@ class ExternalQueue {
 		};
 	}
 
-	getNextAgent(department, ignoreAgentId) {
+	getNextAgent(department, ignoreAgentId, visitor) {
 		for (let i = 0; i < 10; i++) {
 			try {
 				let queryString = department ? `?departmentId=${ department }` : '';
@@ -26,6 +26,13 @@ class ExternalQueue {
 					const ignoreAgentIdParam = `ignoreAgentId=${ ignoreAgentId }`;
 					queryString = queryString.startsWith('?') ? `${ queryString }&${ ignoreAgentIdParam }` : `?${ ignoreAgentIdParam }`;
 				}
+								const visitorData = visitor && visitor.livechatData;
+
+				if (visitorData && typeof visitorData === 'object') {
+					const customFieldParam = Object.keys(visitorData).map((key) => `${ key }=${ visitorData[key] }`).join('&');
+					queryString = queryString.startsWith('?') ? `${ queryString }&${ customFieldParam }` : `?${ customFieldParam }`;
+				}
+
 				const result = HTTP.call('GET', `${ settings.get('Livechat_External_Queue_URL') }${ queryString }`, {
 					headers: {
 						'User-Agent': 'RocketChat Server',
