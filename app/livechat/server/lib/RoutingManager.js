@@ -13,7 +13,7 @@ import {
 	allowAgentSkipQueue,
 } from './Helper';
 import { callbacks } from '../../../callbacks/server';
-import { LivechatRooms, Rooms, Messages, Users, LivechatInquiry, Subscriptions } from '../../../models/server';
+import { LivechatRooms, Rooms, Messages, Users, LivechatInquiry, LivechatVisitors, Subscriptions } from '../../../models/server';
 import { Apps, AppEvents } from '../../../apps/server';
 
 export const RoutingManager = {
@@ -39,14 +39,16 @@ export const RoutingManager = {
 		return this.getMethod().config || {};
 	},
 
-	async getNextAgent(department, ignoreAgentId) {
-		return this.getMethod().getNextAgent(department, ignoreAgentId);
+	async getNextAgent(department, ignoreAgentId, visitor) {
+		return this.getMethod().getNextAgent(department, ignoreAgentId, visitor);
 	},
 
 	async delegateInquiry(inquiry, agent, options = {}) {
-		const { department, rid } = inquiry;
+		const { department, rid, v } = inquiry;
+		const visitor = LivechatVisitors.findOneById(v._id);
+
 		if (!agent || (agent.username && !Users.findOneOnlineAgentByUserList(agent.username) && !allowAgentSkipQueue(agent))) {
-			agent = await this.getNextAgent(department);
+			agent = await this.getNextAgent(department, undefined, visitor);
 		}
 
 		if (!agent) {
