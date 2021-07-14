@@ -26,7 +26,7 @@ class ExternalQueue {
 					const ignoreAgentIdParam = `ignoreAgentId=${ ignoreAgentId }`;
 					queryString = queryString.startsWith('?') ? `${ queryString }&${ ignoreAgentIdParam }` : `?${ ignoreAgentIdParam }`;
 				}
-								const visitorData = visitor && visitor.livechatData;
+				const visitorData = visitor && visitor.livechatData;
 
 				if (visitorData && typeof visitorData === 'object') {
 					const customFieldParam = Object.keys(visitorData).map((key) => `${ key }=${ visitorData[key] }`).join('&');
