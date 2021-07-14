@@ -2,7 +2,7 @@ import Agenda from 'agenda';
 import { MongoInternals } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-import { LivechatRooms, Users } from '../../../../../app/models/server';
+import { LivechatRooms, Users, LivechatVisitors } from '../../../../../app/models/server';
 import { Livechat } from '../../../../../app/livechat/server';
 import { RoutingManager } from '../../../../../app/livechat/server/lib/RoutingManager';
 import { forwardRoomToAgent } from '../../../../../app/livechat/server/lib/Helper';
@@ -57,13 +57,15 @@ class AutoTransferChatSchedulerClass {
 			return false;
 		}
 
-		const { departmentId, servedBy: { _id: ignoreAgentId } } = room;
+		const { departmentId, servedBy: { _id: ignoreAgentId }, v: { _id: visitorId } } = room;
+		const visitor = LivechatVisitors.findOneById(visitorId);
 
 		if (!RoutingManager.getConfig().autoAssignAgent) {
 			return Livechat.returnRoomAsInquiry(room._id, departmentId);
 		}
 
-		const agent = await RoutingManager.getNextAgent(departmentId, ignoreAgentId);
+
+		const agent = await RoutingManager.getNextAgent(departmentId, ignoreAgentId, visitor);
 		if (agent) {
 			return forwardRoomToAgent(room, { userId: agent.agentId, transferredBy: schedulerUser, transferredTo: agent });
 		}
