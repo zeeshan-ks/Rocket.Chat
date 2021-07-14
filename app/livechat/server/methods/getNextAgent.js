@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
-import { LivechatRooms, Users } from '../../../models';
+import { LivechatRooms, Users, LivechatVisitors } from '../../../models';
 import { Livechat } from '../lib/Livechat';
 
 Meteor.methods({
@@ -21,7 +21,8 @@ Meteor.methods({
 			}
 		}
 
-		const agent = await Livechat.getNextAgent(department);
+		const visitor = LivechatVisitors.getVisitorByToken(token);
+		const agent = await Livechat.getNextAgent(department, undefined, visitor);
 		if (!agent) {
 			return;
 		}
