@@ -78,8 +78,8 @@ export const Livechat = {
 		return Livechat.checkOnlineAgents(department);
 	},
 
-	getNextAgent(department) {
-		return RoutingManager.getNextAgent(department);
+	getNextAgent(department, ignoreAgentId, visitor) {
+		return RoutingManager.getNextAgent(department, ignoreAgentId, visitor);
 	},
 
 	getAgents(department) {
