@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Tracker } from 'meteor/tracker';
 
+import { CustomSounds } from '../../app/custom-sounds/client';
 import { Favico } from '../../app/favico/client';
 import { ChatSubscription, ChatRoom } from '../../app/models/client';
 import { settings } from '../../app/settings/client';
@@ -93,6 +94,14 @@ Meteor.startup(() => {
 			favicon.badge(unread, {
 				bgColor: typeof unread !== 'number' ? '#3d8a3a' : '#ac1b1b',
 			});
+		}
+
+		const userId = Meteor.userId();
+		const newMessageNotification = getUserPreference(userId, 'newMessageNotification');
+		if (unread === '') {
+			CustomSounds.pause(newMessageNotification);
+		} else {
+			CustomSounds.play(newMessageNotification, { loop: true });
 		}
 
 		document.title = unread === '' ? siteName : `(${unread}) ${siteName}`;
