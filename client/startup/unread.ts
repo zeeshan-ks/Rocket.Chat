@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Tracker } from 'meteor/tracker';
 
+import { hasRole } from '../../app/authorization/client';
 import { CustomSounds } from '../../app/custom-sounds/client';
 import { Favico } from '../../app/favico/client';
 import { ChatSubscription, ChatRoom } from '../../app/models/client';
@@ -97,6 +98,15 @@ Meteor.startup(() => {
 		}
 
 		const userId = Meteor.userId();
+
+		if (
+			!hasRole(userId, 'livechat-agent') &&
+			!hasRole(userId, 'moderator') &&
+			!hasRole(userId, 'fnb')
+		) {
+			return;
+		}
+
 		const newMessageNotification = getUserPreference(userId, 'newMessageNotification');
 		if (unread === '') {
 			CustomSounds.pause(newMessageNotification);
