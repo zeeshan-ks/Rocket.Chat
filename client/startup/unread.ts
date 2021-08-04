@@ -100,8 +100,6 @@ Meteor.startup(() => {
 		const userId = Meteor.userId();
 
 		if (
-			!hasRole(userId, 'livechat-agent') &&
-			!hasRole(userId, 'moderator') &&
 			!hasRole(userId, 'fnb')
 		) {
 			return;
