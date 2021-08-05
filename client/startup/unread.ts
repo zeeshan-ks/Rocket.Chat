@@ -99,9 +99,7 @@ Meteor.startup(() => {
 
 		const userId = Meteor.userId();
 
-		if (
-			!hasRole(userId, 'fnb')
-		) {
+		if (!hasRole(userId, 'fnb')) {
 			return;
 		}
 
